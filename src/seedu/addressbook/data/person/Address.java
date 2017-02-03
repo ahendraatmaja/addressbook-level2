@@ -9,13 +9,14 @@ import seedu.addressbook.data.exception.IllegalValueException;
 public class Address {
 
     public static final String EXAMPLE = "123, Clementi Ave 3, #12-34, 231534";
-    public static final String MESSAGE_ADDRESS_CONSTRAINTS = "Block, Street, Unit, Postal Code";
+    public static final String MESSAGE_ADDRESS_CONSTRAINTS = "Address should in the the format: Block, Street, Unit, Postal Code";
     public static final String ADDRESS_VALIDATION_REGEX = ".+";
     public static final String SEPARATOR = ", ";
     public static final int BLOCK_PART = 0;
     public static final int STREET_PART = 1;
     public static final int UNIT_PART = 2;
     public static final int POSTALCODE_PART = 3;
+    public static final int ADDRESS_PARTS = 4;
 
     //public final String value;
     private Block block;
@@ -46,7 +47,8 @@ public class Address {
      * Returns true if a given string is a valid person email.
      */
     public static boolean isValidAddress(String[] test) {
-        return Block.isValidBlock(test[BLOCK_PART])
+        return test.length == ADDRESS_PARTS
+        		&& Block.isValidBlock(test[BLOCK_PART])
         		&& Street.isValidStreet(test[STREET_PART])
         		&& Unit.isValidUnit(test[UNIT_PART])
         		&& PostalCode.isValidPostalCode(test[POSTALCODE_PART]);

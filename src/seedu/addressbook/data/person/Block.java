@@ -1,10 +1,10 @@
 package seedu.addressbook.data.person;
 
 /**
- * Represents the Block in the Address of a person
+ * Represents the block of an address in the address book.
  */
 public class Block {
-	private static final String BLOCK_VALIDATION_REGEX = "^[A-Za-z0-9 ]+";
+	private static final String BLOCK_VALIDATION_REGEX = "^[A-Za-z0-9 ]+$";
 	private String block;
 	 	
 	public Block(String block){
