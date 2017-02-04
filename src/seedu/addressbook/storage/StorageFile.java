@@ -1,5 +1,6 @@
 package seedu.addressbook.storage;
 
+import seedu.addressbook.common.Messages;
 import seedu.addressbook.data.AddressBook;
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.storage.jaxb.AdaptedAddressBook;
@@ -9,6 +10,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -152,5 +154,17 @@ public class StorageFile {
     public String getPath() {
         return path.toString();
     }
-
+    
+    /**
+     * Check whether the storage file "addressbook.xml" is present
+     *
+     * @throws FileNotFoundException if storage file cannot be found.
+     */
+    public void checkStorageFile() throws FileNotFoundException {
+       	File f = new File (DEFAULT_STORAGE_FILEPATH);
+    	if (!(f.exists())) {
+    		throw new FileNotFoundException(Messages.MESSAGE_MISSING_STORAGE_FILE);
+    	}
+    }
+    
 }

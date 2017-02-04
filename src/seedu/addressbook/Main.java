@@ -4,11 +4,13 @@ import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.storage.StorageFile.*;
 
 import seedu.addressbook.commands.*;
+import seedu.addressbook.common.Messages;
 import seedu.addressbook.data.AddressBook;
 import seedu.addressbook.parser.Parser;
 import seedu.addressbook.storage.StorageFile;
 import seedu.addressbook.ui.TextUi;
 
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -102,13 +104,19 @@ public class Main {
      *
      * @param command user command
      * @return result of the command
+     * @throws StorageOperationException 
      */
-    private CommandResult executeCommand(Command command)  {
+    private CommandResult executeCommand(Command command) {
         try {
             command.setData(addressBook, lastShownList);
             CommandResult result = command.execute();
+            storage.checkStorageFile();
             storage.save(addressBook);
             return result;
+        } catch (FileNotFoundException e) {
+        	ui.showToUser(e.getMessage());
+        	createNewFile();
+        	return executeCommand(command);
         } catch (Exception e) {
             ui.showToUser(e.getMessage());
             throw new RuntimeException(e);
@@ -124,6 +132,17 @@ public class Main {
         boolean isStorageFileSpecifiedByUser = launchArgs.length > 0;
         return isStorageFileSpecifiedByUser ? new StorageFile(launchArgs[0]) : new StorageFile();
     }
-
-
+    
+    /**
+     * Creates new StorageFile object based on the default storage path.
+     */
+    private void createNewFile() {
+    	 try {
+    		 storage = new StorageFile();
+    	     addressBook = storage.load();
+    	     } catch (InvalidStorageFilePathException | StorageOperationException e) {
+    	    	 ui.showInitFailedMessage();
+    	    	 throw new RuntimeException(e);
+    	     }
+    	 } 
 }
